@@ -1,3 +1,4 @@
+import 'package:deathsticks/constants/theme.dart';
 import 'package:deathsticks/views/auth_switch.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class DeathsticksApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Deathsticks',
-      // theme: new ThemeData(scaffoldBackgroundColor: const Color(0xE5F0FE)),
+      theme: mainTextScale,
       home: AuthSwitch()
     );
   }
