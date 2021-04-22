@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "577576181964",
+    "project_id": "deathsticks-v1",
+    "storage_bucket": "deathsticks-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577576181964:android:f2c565cb44951e465ee269",
+        "android_client_info": {
+          "package_name": "com.unearth.deathsticks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "577576181964-dfcpcgl52ke1p1kqht0l4ccrbhsuclvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbhzV0jyNF30iezFzZdrOMugK7VdNlac8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "577576181964-dfcpcgl52ke1p1kqht0l4ccrbhsuclvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
