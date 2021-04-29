@@ -10,13 +10,16 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainBlue,
       appBar: AppBar(
-        title: Text('Deathsticks'), 
+        title: Text(
+          'Deathsticks',
+          style: (Theme.of(context).textTheme.headline5.apply(color: mainRed)),
+        ), 
         backgroundColor: mainBlueDarker,
         elevation: 0.0,
         actions: <Widget>[
           TextButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('logout'),
+            icon: Icon(Icons.person, color: mainRed),
+            label: Text('logout', style: (Theme.of(context).textTheme.subtitle2.apply(color: mainRedLighter)),),
             onPressed: () async {
               await _auth.signOut();
             },

@@ -2,12 +2,12 @@ import 'package:deathsticks/constants/colors.dart';
 import 'package:deathsticks/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   String username = '';
   String password = '';
@@ -20,7 +20,7 @@ class _SignInState extends State<SignIn> {
         backgroundColor: mainBlueDarker,
         elevation: 0.0,
         title: Text(
-          'Sign in to Deathsticks',
+          'Create an account',
           style: (Theme.of(context).textTheme.headline5.apply(color: mainRed)),
         ),
       ),
@@ -36,15 +36,19 @@ class _SignInState extends State<SignIn> {
               },
             ),
             SizedBox(height: 20.0),
-            TextFormField(obscureText: true, onChanged: (val) {
-              setState(() => password = val);
-            }),
+            TextFormField(
+                obscureText: true,
+                onChanged: (val) {
+                  setState(() => password = val);
+                }),
             SizedBox(height: 20.0),
             ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(mainRedLighter) ),
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(mainRedLighter)),
               // color: mainRedLighter,
               child: Text(
-                'Sign in',
+                'Register',
                 style: (Theme.of(context).textTheme.bodyText1)
                     .apply(color: mainBlueDarker),
               ),

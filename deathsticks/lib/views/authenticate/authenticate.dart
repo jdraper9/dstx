@@ -1,3 +1,4 @@
+import 'package:deathsticks/views/authenticate/register.dart';
 import 'package:deathsticks/views/authenticate/sign_in.dart';
 import 'package:flutter/material.dart';
 

@@ -7,5 +7,7 @@ const Color mainBlueDarkest =  Color.fromRGBO(191,218,253, 1);
 
 // reds
 const Color mainRed = Color.fromRGBO(234, 50, 35, 1);
+  // darker
 const Color secondaryRed = Color.fromRGBO(229, 0, 0, 1);
+const Color mainRedLighter = Color.fromRGBO(236, 67, 53, .8);
 
