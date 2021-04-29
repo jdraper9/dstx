@@ -1,13 +1,19 @@
+import 'package:deathsticks/models/person.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Person _person(User user) {
+    return user != null ? Person(uid: user.uid) : null;
+  }
 
   // sign in anon
   Future signInAnon() async {
     try {
       UserCredential userCredential = await _auth.signInAnonymously();
       User user = userCredential.user;
+      return _person(user);
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       if (e.code == 'user-not-found') {

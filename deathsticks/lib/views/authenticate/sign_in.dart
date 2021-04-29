@@ -1,4 +1,5 @@
 import 'package:deathsticks/constants/colors.dart';
+import 'package:deathsticks/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -7,6 +8,9 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,8 +35,14 @@ class _SignInState extends State<SignIn> {
             onPrimary: mainBlueDarkest,
           ),
           onPressed: () async {
-            // https://www.youtube.com/watch?v=LBJoY4VjECo&list=PL4cUxeGkcC9j--TKIdkb3ISfRbJeJYQwC&index=5&ab_channel=TheNetNinja
-            // 5:03
+            dynamic result = await _auth.signInAnon();
+            print(result);
+            if (result == null) {
+              print('error signing in');
+            } else {
+              print('signed in');
+              print(result.uid);
+            }
           },
         )
       ),
