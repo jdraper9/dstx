@@ -5,7 +5,16 @@ class AuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   Person _person(User user) {
+    //modify user attributes from firebase here
+    //print(user);
     return user != null ? Person(uid: user.uid) : null;
+  }
+
+  // auth change user stream
+  Stream<Person> get person {
+    return _auth.authStateChanges()
+      // .map((User user) => _person(user));
+      .map(_person);
   }
 
   // sign in anon
@@ -30,4 +39,12 @@ class AuthService {
   // register w/ username + password
 
   // sign out
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }
