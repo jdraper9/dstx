@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 // blues
+const Color mainBlueLighter =  Color.fromRGBO(248,251,255, 1);
 const Color mainBlue =  Color.fromRGBO(229, 240, 254, 1);
 const Color mainBlueDarker =  Color.fromRGBO(210,229,253, 1);
 const Color mainBlueDarkest =  Color.fromRGBO(191,218,253, 1);

@@ -12,17 +12,17 @@ class AuthService {
 
   // auth change user stream
   Stream<Person> get person {
-    return _auth.authStateChanges()
-      // .map((User user) => _person(user));
-      .map(_person);
+    return _auth
+        .authStateChanges()
+        // .map((User user) => _person(user));
+        .map(_person);
   }
 
   // sign in anon
   Future signInAnon() async {
     try {
       UserCredential userCredential = await _auth.signInAnonymously();
-      User user = userCredential.user;
-      return _person(user);
+      return _person(userCredential.user);
     } on FirebaseAuthException catch (e) {
       print(e.toString());
       if (e.code == 'user-not-found') {
@@ -35,8 +35,42 @@ class AuthService {
   }
 
   // sign in w/ username + password
+  Future signInWithUsernameAndPassword(
+      String username, String password) async {
+    try {
+      String email = username + '@james.draper.316.com';
+      UserCredential userCredential = await _auth
+          .signInWithEmailAndPassword(email: email, password: password);
+          return _person(userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return 'User not found';
+      } else if (e.code == 'wrong-password') {
+        return 'Incorrect password';
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   // register w/ username + password
+  Future registerWithUsernameAndPassword(
+      String username, String password) async {
+    try {
+      String email = username + '@james.draper.316.com';
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+          return _person(userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return 'Weak password (<6 characters)';
+      } else if (e.code == 'email-already-in-use') {
+        return 'Account already exists for that email.';
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   // sign out
   Future signOut() async {
