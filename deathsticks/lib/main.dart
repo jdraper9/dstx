@@ -12,7 +12,7 @@ void main() {
 }
 
 // notes
-//
+// on 15
 
 class DeathsticksApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
