@@ -59,8 +59,9 @@ class AuthService {
       String username, String password) async {
     try {
       String email = username + '@james.draper.316.com';
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await
+        _auth.createUserWithEmailAndPassword(email: email, password: password);
+      // determine what happens when person is created
       await DatabaseService(uid: userCredential.user.uid).updatePerson(0);
       return _person(userCredential.user);
     } on FirebaseAuthException catch (e) {

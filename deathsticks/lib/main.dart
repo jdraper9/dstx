@@ -41,6 +41,7 @@ class DeathsticksApp extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             return StreamProvider<Person>.value(
               initialData: null,
+              // get person, returns authStateChanges mapped to Person
               value: AuthService().person,
               child: MaterialApp(
                   title: 'Deathsticks',

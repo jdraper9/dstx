@@ -1,5 +1,6 @@
 import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:deathsticks/services/auth.dart';
+import 'package:deathsticks/views/home/increment_button/button_container.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -53,14 +54,7 @@ class Home extends StatelessWidget {
             ),
             SizedBox(height: 50.0),
             // turn into exported view from seperate file
-            Container(
-              height: 93.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(60),
-                border: Border.all(color: mainRedLighter, width: .3),
-              ),
-            ),
+            ButtonContainer(),
           ],
         ),
       ),
