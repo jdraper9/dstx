@@ -1,5 +1,6 @@
-import 'package:deathsticks/constants/colors.dart';
-import 'package:deathsticks/constants/shared.dart';
+import 'package:deathsticks/shared/components/loading.dart';
+import 'package:deathsticks/shared/constants/colors.dart';
+import 'package:deathsticks/shared/styles.dart';
 import 'package:deathsticks/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   String username = '';
   String password = '';
@@ -24,15 +26,21 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: mainBlue,
       appBar: AppBar(
         backgroundColor: mainBlueDarker,
-        elevation: .5,
+        elevation: .1,
+        toolbarHeight: 60.0,
+        leading: Image(
+          image: AssetImage('lib/assets/images/no-smoking.png')
+        ),
         title: Text(
           'Get Started',
           style: (Theme.of(context).textTheme.headline5.apply(color: mainRed)),
         ),
+        centerTitle: false,
+        titleSpacing: 0.0,
         actions: <Widget>[
           TextButton.icon(
             icon: Icon(Icons.person, color: mainRed),
@@ -50,7 +58,7 @@ class _RegisterState extends State<Register> {
       body: Align(
         alignment: Alignment.bottomCenter,
               child: Container(
-                height: 420.0,
+                height: 450.0,
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Form(
             key: _formKey,
@@ -69,6 +77,7 @@ class _RegisterState extends State<Register> {
                 decoration: textInputDecoration.copyWith(hintText: 'Password'),
                 validator: (val) => val.isEmpty ? 'Enter a password' : null,
                 obscureText: true,
+                style: TextStyle(color: secondaryRed),
                 onChanged: (val) {
                   setState(() => password = val);
                 }),
@@ -84,6 +93,7 @@ class _RegisterState extends State<Register> {
                   return null;
                 },
                 obscureText: true,
+                style: TextStyle(color: secondaryRed),
                 onChanged: (val) {
                   setState(() => confirmPassword = val);
                 }),
@@ -101,10 +111,14 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    setState(() => loading = true);
                     dynamic result = await _auth.registerWithUsernameAndPassword(
                         username, password);
                     if (result is String) {
-                      setState(() => error = result);
+                      setState(() {
+                        error = result;
+                        loading = false;
+                      });
                     }
                   }
                 },
@@ -112,27 +126,6 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 12.0,),
             ]),
           ),
-
-          // child: ElevatedButton(
-          //   child: Text(
-          //     'Sign in anon',
-          //     style: Theme.of(context).textTheme.button.apply(color: mainRed),
-          //   ),
-          //   style: ElevatedButton.styleFrom(
-          //     primary: mainBlueDarker,
-          //     onPrimary: mainBlueDarkest,
-          //   ),
-          //   onPressed: () async {
-          //     dynamic result = await _auth.signInAnon();
-          //     print(result);
-          //     if (result == null) {
-          //       print('error signing in');
-          //     } else {
-          //       print('signed in');
-          //       print(result.hashCode);
-          //     }
-          //   },
-          // )
         ),
       ),
     );

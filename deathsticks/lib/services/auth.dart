@@ -1,4 +1,5 @@
 import 'package:deathsticks/models/person.dart';
+import 'package:deathsticks/services/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -60,7 +61,8 @@ class AuthService {
       String email = username + '@james.draper.316.com';
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
-          return _person(userCredential.user);
+      await DatabaseService(uid: userCredential.user.uid).updatePerson(0);
+      return _person(userCredential.user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         return 'Weak password (<6 characters)';

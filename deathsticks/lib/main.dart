@@ -1,4 +1,6 @@
-import 'package:deathsticks/constants/theme.dart';
+import 'package:deathsticks/shared/components/broke.dart';
+import 'package:deathsticks/shared/components/loading.dart';
+import 'package:deathsticks/shared/constants/theme.dart';
 import 'package:deathsticks/models/person.dart';
 import 'package:deathsticks/services/auth.dart';
 import 'package:deathsticks/views/auth_switch.dart';
@@ -31,7 +33,7 @@ class DeathsticksApp extends StatelessWidget {
               child: MaterialApp(
                   title: 'Deathsticks',
                   theme: mainTextScale,
-                  home: AuthSwitch()),
+                  home: Broken()),
             );
           }
 
@@ -48,14 +50,7 @@ class DeathsticksApp extends StatelessWidget {
           }
 
           // else
-          return StreamProvider<Person>.value(
-              initialData: null,
-              value: AuthService().person,
-              child: MaterialApp(
-                  title: 'Deathsticks',
-                  theme: mainTextScale,
-                  home: AuthSwitch()),
-            );
+          return Loading();
         });
   }
 }

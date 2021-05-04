@@ -1,4 +1,4 @@
-import 'package:deathsticks/constants/colors.dart';
+import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:deathsticks/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +10,18 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: mainBlue,
       appBar: AppBar(
+        toolbarHeight: 60.0,
+        leading: Image(
+          image: AssetImage('lib/assets/images/no-smoking.png')
+        ),
         title: Text(
           'Deathsticks',
           style: (Theme.of(context).textTheme.headline5.apply(color: mainRed)),
         ), 
+        centerTitle: false,
+        titleSpacing: 0.0,
         backgroundColor: mainBlueDarker,
-        elevation: 0.0,
+        elevation: 0.2,
         actions: <Widget>[
           TextButton.icon(
             icon: Icon(Icons.person, color: mainRed),
@@ -25,7 +31,39 @@ class Home extends StatelessWidget {
             },
           )
         ],
-      )
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 26.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 40.0),
+            Text('April, 20', style: (Theme.of(context).textTheme.subtitle2.apply(color: lightGray))), 
+            SizedBox(height: 10.0),
+            Text('Daily Tracker', style: (Theme.of(context).textTheme.subtitle2.apply(color: darkGray))),
+            SizedBox(height: 40.0),
+            // turn into exported view from seperate file
+            Container(
+              height: 319.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(color: mainRedLighter, width: .3),
+              ),
+            ),
+            SizedBox(height: 50.0),
+            // turn into exported view from seperate file
+            Container(
+              height: 93.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(60),
+                border: Border.all(color: mainRedLighter, width: .3),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

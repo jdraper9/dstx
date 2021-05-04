@@ -1,4 +1,4 @@
-import 'package:deathsticks/constants/colors.dart';
+import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 const textInputDecoration = InputDecoration(

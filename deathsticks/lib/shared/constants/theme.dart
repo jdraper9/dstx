@@ -23,7 +23,7 @@ final ThemeData mainTextScale = ThemeData(
       letterSpacing: 2.25
     ),
     headline5: TextStyle(
-      fontSize: 25,
+      fontSize: 23,
       fontWeight: FontWeight.w400,
       letterSpacing: 2,
     ),
@@ -40,7 +40,7 @@ final ThemeData mainTextScale = ThemeData(
     subtitle2: TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w500,
-      letterSpacing: 1.25
+      letterSpacing: 1.25,
     ),
     bodyText1: TextStyle(
       fontSize: 16,
