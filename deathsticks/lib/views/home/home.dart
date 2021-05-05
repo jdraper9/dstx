@@ -1,5 +1,6 @@
 import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:deathsticks/services/auth.dart';
+import 'package:deathsticks/views/home/chart/chart_container.dart';
 import 'package:deathsticks/views/home/increment_button/button_container.dart';
 import 'package:flutter/material.dart';
 
@@ -43,17 +44,8 @@ class Home extends StatelessWidget {
             SizedBox(height: 10.0),
             Text('Daily Tracker', style: (Theme.of(context).textTheme.subtitle2.apply(color: darkGray))),
             SizedBox(height: 40.0),
-            // turn into exported view from seperate file
-            Container(
-              height: 319.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: mainRedLighter, width: .3),
-              ),
-            ),
+            ChartContainer(),
             SizedBox(height: 50.0),
-            // turn into exported view from seperate file
             ButtonContainer(),
           ],
         ),
