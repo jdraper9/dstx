@@ -20,7 +20,7 @@ class Home extends StatelessWidget {
           style: (Theme.of(context).textTheme.headline5.apply(color: mainRed)),
         ), 
         centerTitle: false,
-        titleSpacing: 0.1,
+        titleSpacing: 0.0,
         backgroundColor: mainBlueDarker,
         elevation: 0.2,
         actions: <Widget>[
