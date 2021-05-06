@@ -62,7 +62,7 @@ class AuthService {
       UserCredential userCredential = await
         _auth.createUserWithEmailAndPassword(email: email, password: password);
       // determine what happens when person is created
-      await DatabaseService(uid: userCredential.user.uid).updatePerson(0);
+      await DatabaseService(uid: userCredential.user.uid).registerPerson();
       return _person(userCredential.user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
