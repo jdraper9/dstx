@@ -8,10 +8,20 @@ class DatabaseService {
   // collection reference
   final CollectionReference dstxCollection = FirebaseFirestore.instance.collection('data');
 
-  Future updatePerson(int count) async {
-    return await dstxCollection.doc(uid).set({
-      'count': count,
-    });
+  // register
+  Future registerPerson() async {
+    return dstxCollection.doc(uid).collection('days').doc('5-5-2021').set({
+      'welcome': true
+    })
+    .then((val) => print ("Registered"))
+    .catchError((err) => print("Fail to register: $err"));
+  }
+
+  // increment count 
+  Future increment() async {
+    var now = Timestamp.now().seconds.toString();
+    print(now);
+    return await dstxCollection.doc(uid).collection('days').doc('5-5-2021').set({'$now': true}, SetOptions(merge: true));
   }
 
 }
