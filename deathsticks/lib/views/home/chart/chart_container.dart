@@ -5,7 +5,7 @@ class ChartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 319.0,
+      height: 360.0,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),

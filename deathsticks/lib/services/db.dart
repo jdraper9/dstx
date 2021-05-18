@@ -1,34 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deathsticks/models/day.dart';
+import 'package:deathsticks/models/event.dart';
 
 class DatabaseService {
-
   final String uid;
-  DatabaseService({ this.uid });
+  final Day today = Day(
+      month: DateTime.now().month,
+      day: DateTime.now().day,
+      year: DateTime.now().year);
+
+  Day get getToday {
+    return today;
+  }
+
+  DatabaseService({this.uid});
 
   // collection reference
-  final CollectionReference dstxCollection = FirebaseFirestore.instance.collection('data');
-
-  Day _today(DateTime nowDateTime) {
-    return nowDateTime != null ? Day(month: nowDateTime.month, day: nowDateTime.day, year: nowDateTime.year) : null;
-  }
+  final CollectionReference dstxCollection =
+      FirebaseFirestore.instance.collection('data');
 
   // register
   Future registerPerson() async {
-    var today = _today(DateTime.now());
-    return dstxCollection.doc(uid).collection('days').doc('${today.month}-${today.day}-${today.year}').set({
-      'welcome': true
-    })
-    .then((val) => print ("Registered"))
-    .catchError((err) => print("Fail to register: $err"));
+    var nowTimestamp = Timestamp.now().seconds.toString();
+    return dstxCollection
+        .doc(uid)
+        .collection('days')
+        .doc(today.toDayRef())
+        .set({'$nowTimestamp': false})
+        .then((val) => print("Registered"))
+        .catchError((err) => print("Fail to register: $err"));
   }
 
   // increment count
   Future increment() async {
-    var today = _today(DateTime.now());
+    Day updatedToday = Day(
+        month: DateTime.now().month,
+        day: DateTime.now().day,
+        year: DateTime.now().year);
     var nowTimestamp = Timestamp.now().seconds.toString();
-    print(nowTimestamp);
-    return await dstxCollection.doc(uid).collection('days').doc('${today.month}-${today.day}-${today.year}').set({'$nowTimestamp': true}, SetOptions(merge: true));
+    return await dstxCollection
+        .doc(uid)
+        .collection('days')
+        .doc(updatedToday.toDayRef())
+        .set({'$nowTimestamp': true}, SetOptions(merge: true));
+  }
+
+  // get Person's list of Days as stream
+
+  // get Day's list of Events as stream
+  List<Event> _listOfEventsFromSnapshot(DocumentSnapshot snapshot) {
+    List<Event> list = [];
+    if (snapshot.exists) {
+      snapshot.data().forEach((key, value) {
+        list.add(Event(timeOfEvent: key, isActive: value));
+      });
+    }
+    return list;
+  }
+
+  Stream<List<Event>> get eventsForDay {
+    print(today.toDayRef());
+    print(uid);
+    return dstxCollection
+        .doc(uid)
+        .collection('days')
+        .doc(today.toDayRef())
+        .snapshots()
+        .map((snapshot) => _listOfEventsFromSnapshot(snapshot));
   }
 
 }

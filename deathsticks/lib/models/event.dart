@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Event {
 
-  final Timestamp timeOfEvent;
+  final String timeOfEvent;
+  final bool isActive;
 
-  Event({ this.timeOfEvent });
+  Event({ this.timeOfEvent, this.isActive });
 
 }

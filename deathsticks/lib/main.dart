@@ -37,7 +37,7 @@ class DeathsticksApp extends StatelessWidget {
             );
           }
 
-          // complete
+          // MAIN
           if (snapshot.connectionState == ConnectionState.done) {
             return StreamProvider<Person>.value(
               initialData: null,
