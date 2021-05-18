@@ -20,7 +20,7 @@ class _ButtonState extends State<Button> {
       child: FloatingActionButton(
         onPressed: () {
           dynamic res = db.increment();
-          print(res);
+          // print(res);
         },
         child: Icon(Icons.add),
         backgroundColor: mainBlueDarker,

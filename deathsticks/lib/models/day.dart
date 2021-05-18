@@ -6,4 +6,8 @@ class Day {
 
   Day({ this.month, this.day, this.year });
 
+  String toDayRef() {
+    return '${this.month}-${this.day}-${this.year}';
+  }
+
 }
