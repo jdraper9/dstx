@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:deathsticks/models/day.dart';
 
 class DatabaseService {
 
@@ -8,20 +9,26 @@ class DatabaseService {
   // collection reference
   final CollectionReference dstxCollection = FirebaseFirestore.instance.collection('data');
 
+  Day _today(DateTime nowDateTime) {
+    return nowDateTime != null ? Day(month: nowDateTime.month, day: nowDateTime.day, year: nowDateTime.year) : null;
+  }
+
   // register
   Future registerPerson() async {
-    return dstxCollection.doc(uid).collection('days').doc('5-5-2021').set({
+    var today = _today(DateTime.now());
+    return dstxCollection.doc(uid).collection('days').doc('${today.month}-${today.day}-${today.year}').set({
       'welcome': true
     })
     .then((val) => print ("Registered"))
     .catchError((err) => print("Fail to register: $err"));
   }
 
-  // increment count 
+  // increment count
   Future increment() async {
-    var now = Timestamp.now().seconds.toString();
-    print(now);
-    return await dstxCollection.doc(uid).collection('days').doc('5-5-2021').set({'$now': true}, SetOptions(merge: true));
+    var today = _today(DateTime.now());
+    var nowTimestamp = Timestamp.now().seconds.toString();
+    print(nowTimestamp);
+    return await dstxCollection.doc(uid).collection('days').doc('${today.month}-${today.day}-${today.year}').set({'$nowTimestamp': true}, SetOptions(merge: true));
   }
 
 }
