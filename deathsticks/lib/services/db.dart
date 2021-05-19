@@ -45,8 +45,6 @@ class DatabaseService {
         .set({'$nowTimestamp': true}, SetOptions(merge: true));
   }
 
-  // get Person's list of Days as stream
-
   // get Day's list of Events as stream
   List<Event> _listOfEventsFromSnapshot(DocumentSnapshot snapshot) {
     List<Event> list = [];
@@ -58,7 +56,7 @@ class DatabaseService {
     return list;
   }
 
-  Stream<List<Event>> get eventsForDay {
+  Stream<List<Event>> get eventsForToday {
     print(today.toDayRef());
     print(uid);
     return dstxCollection
@@ -66,7 +64,20 @@ class DatabaseService {
         .collection('days')
         .doc(today.toDayRef())
         .snapshots()
-        .map((snapshot) => _listOfEventsFromSnapshot(snapshot));
+        .map(_listOfEventsFromSnapshot);
   }
+
+  // get History (Person's collection('days')) \
+  // List of Days, which have Lists of Events. Map Events to
+  //   daily count, find Nadir, use daily count and Nadir to map daily Events list to Score
+
+  // just need list of (date, score)
+  // get ('days') collection, each id within becomes Day, each Day has Events
+  // from each day, get score
+  Future<QuerySnapshot> getHistory() async {
+    return await dstxCollection.doc(uid).collection('days').get();
+  }
+
+
 
 }

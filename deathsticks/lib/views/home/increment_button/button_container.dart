@@ -15,7 +15,7 @@ class ButtonContainer extends StatelessWidget {
 
     return StreamProvider<List<Event>>.value(
       initialData: null,
-      value: db.eventsForDay,
+      value: db.eventsForToday,
       child: Container(
         height: 93.0,
         decoration: BoxDecoration(
