@@ -1,4 +1,5 @@
 import 'package:deathsticks/shared/constants/colors.dart';
+import 'package:deathsticks/views/home/chart/chart.dart';
 import 'package:flutter/material.dart';
 
 class ChartContainer extends StatelessWidget {
@@ -11,6 +12,7 @@ class ChartContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: mainRedLighter, width: .3),
       ),
+      child: Chart()
     );
   }
 }

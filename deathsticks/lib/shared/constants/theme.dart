@@ -48,7 +48,7 @@ final ThemeData mainTextScale = ThemeData(
       letterSpacing: 2
     ),
     bodyText2: TextStyle(
-      fontSize: 14,
+      fontSize: 12,
       fontWeight: FontWeight.w400,
       letterSpacing: 1.25
     ),
