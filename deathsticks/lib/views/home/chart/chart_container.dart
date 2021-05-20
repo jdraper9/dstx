@@ -16,7 +16,7 @@ class ChartContainer extends StatelessWidget {
       initialData: [],
       value: db.eventsForToday,
       child: Container(
-          height: 360.0,
+          height: 300.0,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(30),

@@ -14,6 +14,8 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
+  List<DataPoint<dynamic>> dataPoints = [];
+
   @override
   Widget build(BuildContext context) {
     final person = Provider.of<Person>(context);
@@ -21,7 +23,6 @@ class _ChartState extends State<Chart> {
 
     //history
     List<Day> history = [];
-    List<DataPoint<dynamic>> dataPoints = [];
 
 
     // calc dailyCount from stream
@@ -49,7 +50,7 @@ class _ChartState extends State<Chart> {
       history.forEach((day) {
         DateTime dayDate = DateTime(day.year, day.month, day.day);
         int dayCount = day.events.length;
-        if (dayDate != DateTime.now()) {
+        if (DateTime.now().difference(dayDate).inDays != 0) {
           DataPoint<DateTime> point = DataPoint(value: dayCount.toDouble(), xAxis: dayDate);
           points.add(point);
         } else {
@@ -64,7 +65,6 @@ class _ChartState extends State<Chart> {
       // for each doc, create Day
       value.docs.forEach((QueryDocumentSnapshot doc) {
         //create day, and empty list
-        print(doc.id);
         var dateArray = doc.id.split("-");
         Day pastDay = Day(month: int.parse(dateArray[0]), day: int.parse(dateArray[1]), year: int.parse(dateArray[2]));
         List<Event> pastDayEvents = [];
@@ -78,7 +78,10 @@ class _ChartState extends State<Chart> {
         });
         pastDay.events = pastDayEvents;
         history.add(pastDay);
-        dataPoints = dataPointsFromHistory(history);
+        setState(() {
+          dataPoints = dataPointsFromHistory(history);
+        });
+        // dataPoints = ;
       })
     });
 

@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
             Text('Daily Tracker', style: (Theme.of(context).textTheme.subtitle2.apply(color: darkGray))),
             SizedBox(height: 60.0),
             ChartContainer(),
-            SizedBox(height: 70.0),
+            SizedBox(height: 50.0),
             ButtonContainer(),
           ],
         ),
