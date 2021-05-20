@@ -3,6 +3,7 @@ import 'package:deathsticks/services/auth.dart';
 import 'package:deathsticks/views/home/chart/chart_container.dart';
 import 'package:deathsticks/views/home/increment_button/button_container.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -23,7 +24,7 @@ class Home extends StatelessWidget {
         centerTitle: false,
         titleSpacing: 0.0,
         backgroundColor: mainBlueDarker,
-        elevation: 0.2,
+        elevation: 2.0,
         actions: <Widget>[
           TextButton.icon(
             icon: Icon(Icons.person, color: mainRed),
@@ -40,7 +41,7 @@ class Home extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 40.0),
-            Text('April, 20', style: (Theme.of(context).textTheme.subtitle2.apply(color: lightGray))), 
+            Text('${DateFormat('MMMM, d').format(DateTime.now())}', style: (Theme.of(context).textTheme.subtitle2.apply(color: lightGray))), 
             SizedBox(height: 10.0),
             Text('Daily Tracker', style: (Theme.of(context).textTheme.subtitle2.apply(color: darkGray))),
             SizedBox(height: 60.0),

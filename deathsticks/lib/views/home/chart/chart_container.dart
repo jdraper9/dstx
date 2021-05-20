@@ -22,7 +22,7 @@ class ChartContainer extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
             border: Border.all(color: mainRedLighter, width: .3),
           ),
-          child: Chart()),
+          child: Chart(db: db)),
     );
   }
 }
