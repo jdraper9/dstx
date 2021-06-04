@@ -1,7 +1,7 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:deathsticks/models/event.dart';
 import 'package:deathsticks/services/db.dart';
-import 'package:deathsticks/shared/components/loading.dart';
+import 'package:deathsticks/shared/components/loading_2.dart';
 import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -89,7 +89,7 @@ class _ChartState extends State<Chart> {
                     ),
                   ),
                 )
-              : Loading();
+              : Loading2();
         });
   }
 }
