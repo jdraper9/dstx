@@ -1,3 +1,4 @@
+
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deathsticks/models/day.dart';
@@ -23,6 +24,7 @@ class DatabaseService {
   // register
   Future registerPerson() async {
     var nowTimestamp = Timestamp.now().seconds.toString();
+    await dstxCollection.doc(uid).set({'nadir': 0});
     return dstxCollection
         .doc(uid)
         .collection('days')
@@ -32,6 +34,49 @@ class DatabaseService {
         .catchError((err) => print("Fail to register: $err"));
   }
 
+  // get Nadir Stream
+  Stream<int> get nadir {
+    dstxCollection.doc(uid).get()
+    .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print(documentSnapshot.data()['nadir']);
+        return documentSnapshot.data()['nadir'];
+      }
+    });
+  }
+
+  // get Nadir async
+  Future<int> getNadir() {
+    return dstxCollection.doc(uid).get()
+    .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        return documentSnapshot.data()['nadir'];
+      }
+    });
+  }
+
+  // get today's count async
+  Future<int> getDailyCount() async {
+    Day updatedToday = Day(
+        month: DateTime.now().month,
+        day: DateTime.now().day,
+        year: DateTime.now().year);
+    
+    return await dstxCollection.doc(uid).collection('days')
+      .doc(updatedToday.toDayRef())
+      .get()
+      .then((DocumentSnapshot documentSnapshot) {
+        // (plus one because incrementing)
+        int x = 1;
+        documentSnapshot.data().forEach((key, value) {
+          if (value) {
+            x += 1;
+          }
+        });
+        return x;
+      });
+  }
+
   // increment count
   Future increment() async {
     Day updatedToday = Day(
@@ -39,6 +84,11 @@ class DatabaseService {
         day: DateTime.now().day,
         year: DateTime.now().year);
     var nowTimestamp = Timestamp.now().seconds.toString();
+    int n = await getNadir();
+    int x = await getDailyCount();
+    if (x > n) {
+      await dstxCollection.doc(uid).set({'nadir': x});
+    }
     return await dstxCollection
         .doc(uid)
         .collection('days')
@@ -58,8 +108,6 @@ class DatabaseService {
   }
 
   Stream<List<Event>> get eventsForToday {
-    print(today.toDayRef());
-    print(uid);
     return dstxCollection
         .doc(uid)
         .collection('days')
