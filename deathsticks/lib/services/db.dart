@@ -79,9 +79,8 @@ class DatabaseService {
       .doc(day.toDayRef())
       .get()
       .then((DocumentSnapshot documentSnapshot) {
-        // (plus one because incrementing) .. ?
         int x = 0;
-        if (documentSnapshot.exists) {
+        if (documentSnapshot.data().isNotEmpty) {
           documentSnapshot.data()['list'].forEach((key, value) {
           if (value) {
             x += 1;
@@ -102,7 +101,7 @@ class DatabaseService {
     int n = await getTodayNadir();
     // if n = 0, set to n of yesterday, or if none yesterday, to x
     int x = await getDailyCount(updatedToday) + 1;
-    if (n == 0) {
+    if (n == 0 || n == null) {
       // check yesterday
       print('n==0: new day?');
       Day yesterday = Day(
