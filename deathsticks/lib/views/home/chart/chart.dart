@@ -54,12 +54,12 @@ class _ChartState extends State<Chart> {
                     selectedDate: toDate,
                     series: [
                       BezierLine(
-                        label: "Event",
+                        label: "Score",
                         dataPointFillColor: mainBlueLighter,
                         lineColor: mainRed,
-                        onMissingValue: (dateTime) {
-                          return 0;
-                        },
+                        // onMissingValue: (dateTime) {
+                        //   return 0;
+                        // },
                         data: [
                           // DataPoint<DateTime>(value: 10.0, xAxis: now)
                           DataPoint<DateTime>(

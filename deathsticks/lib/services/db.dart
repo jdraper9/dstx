@@ -22,57 +22,72 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('data');
 
   // register
-  Future registerPerson() async {
+  Future registerPerson(String username) async {
     var nowTimestamp = Timestamp.now().seconds.toString();
-    await dstxCollection.doc(uid).set({'nadir': 0});
+    await dstxCollection.doc(uid).set({'username': username});
     return dstxCollection
         .doc(uid)
         .collection('days')
         .doc(today.toDayRef())
-        .set({'$nowTimestamp': false})
+        .set({'list': {'$nowTimestamp': false}, 'dailyNadir': 0})
         .then((val) => print("Registered"))
         .catchError((err) => print("Fail to register: $err"));
   }
 
+  int _nadirFromSnapshot(DocumentSnapshot snapshot) {
+    return snapshot.data()['nadir'];
+  }
+
   // get Nadir Stream
   Stream<int> get nadir {
-    dstxCollection.doc(uid).get()
+    return dstxCollection.doc(uid).snapshots().map(_nadirFromSnapshot);
+  }
+
+  // get dailyNadir for today
+  Future<int> getTodayNadir() async {
+    Day updatedToday = Day(
+        month: DateTime.now().month,
+        day: DateTime.now().day,
+        year: DateTime.now().year);
+    return await dstxCollection.doc(uid).collection('days')
+    .doc(updatedToday.toDayRef()).get()
     .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print(documentSnapshot.data()['nadir']);
-        return documentSnapshot.data()['nadir'];
+        return documentSnapshot.data()['dailyNadir'];
+      } else {
+        return 1;
       }
     });
   }
 
-  // get Nadir async
-  Future<int> getNadir() {
-    return dstxCollection.doc(uid).get()
+  // get dailyNadir for today
+  Future<int> getNadir(Day day) async {
+    return await dstxCollection.doc(uid).collection('days')
+    .doc(day.toDayRef()).get()
     .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        return documentSnapshot.data()['nadir'];
+        return documentSnapshot.data()['dailyNadir'];
+      } else {
+        return 1;
       }
     });
   }
 
   // get today's count async
-  Future<int> getDailyCount() async {
-    Day updatedToday = Day(
-        month: DateTime.now().month,
-        day: DateTime.now().day,
-        year: DateTime.now().year);
-    
+  Future<int> getDailyCount(Day day) async {
     return await dstxCollection.doc(uid).collection('days')
-      .doc(updatedToday.toDayRef())
+      .doc(day.toDayRef())
       .get()
       .then((DocumentSnapshot documentSnapshot) {
-        // (plus one because incrementing)
-        int x = 1;
-        documentSnapshot.data().forEach((key, value) {
+        // (plus one because incrementing) .. ?
+        int x = 0;
+        if (documentSnapshot.exists) {
+          documentSnapshot.data()['list'].forEach((key, value) {
           if (value) {
             x += 1;
           }
         });
+        }
         return x;
       });
   }
@@ -84,23 +99,41 @@ class DatabaseService {
         day: DateTime.now().day,
         year: DateTime.now().year);
     var nowTimestamp = Timestamp.now().seconds.toString();
-    int n = await getNadir();
-    int x = await getDailyCount();
-    if (x > n) {
-      await dstxCollection.doc(uid).set({'nadir': x});
+    int n = await getTodayNadir();
+    // if n = 0, set to n of yesterday, or if none yesterday, to x
+    int x = await getDailyCount(updatedToday) + 1;
+    if (n == 0) {
+      // check yesterday
+      print('n==0: new day?');
+      Day yesterday = Day(
+        month: DateTime.now().subtract(Duration(days: 1)).month,
+        day: DateTime.now().subtract(Duration(days: 1)).day,
+        year: DateTime.now().subtract(Duration(days: 1)).year,
+      );
+      int yesterdayN = await getNadir(yesterday);
+      if (yesterdayN != null && yesterdayN != 0) {
+        print('yes here');
+        print(yesterdayN);
+        await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
+      .set({'dailyNadir': yesterdayN}, SetOptions(merge: true));
+      }
+    } else if (x > n) {
+      
+      await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
+      .set({'dailyNadir': x}, SetOptions(merge: true));
     }
     return await dstxCollection
         .doc(uid)
         .collection('days')
         .doc(updatedToday.toDayRef())
-        .set({'$nowTimestamp': true}, SetOptions(merge: true));
+        .set({'list': {'$nowTimestamp': true}}, SetOptions(merge: true));
   }
 
   // get Day's list of Events as stream
   List<Event> _listOfEventsFromSnapshot(DocumentSnapshot snapshot) {
     List<Event> list = [];
     if (snapshot.exists) {
-      snapshot.data().forEach((key, value) {
+      snapshot.data()['list'].forEach((key, value) {
         list.add(Event(timeOfEvent: key, isActive: value));
       });
     }
@@ -140,7 +173,7 @@ class DatabaseService {
           year: int.parse(dateArray[2]));
       List<Event> pastDayEvents = [];
       // for each field, create Event
-      doc.data().forEach((key, value) {
+      doc.data()['list'].forEach((key, value) {
         // create Event (if active), push to list
         if (value == true) {
           Event e = Event(timeOfEvent: key, isActive: value);
