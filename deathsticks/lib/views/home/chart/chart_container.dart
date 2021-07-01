@@ -12,17 +12,26 @@ class ChartContainer extends StatelessWidget {
     final person = Provider.of<Person>(context);
     final DatabaseService db = DatabaseService(uid: person.uid);
 
-    return StreamProvider<List<Event>>.value(
-      initialData: [],
-      value: db.eventsForToday,
+    return MultiProvider(
+      providers: [
+        StreamProvider<List<Event>>.value(
+        initialData: [],
+        value: db.eventsForToday,
+        
+      ),
+        StreamProvider<String>.value(
+          initialData: 'true',
+          value: db.reloadStream,
+        )
+      ],
       child: Container(
-          height: 300.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: mainRedLighter, width: .3),
-          ),
-          child: Chart(db: db)),
+            height: 300.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(color: mainRedLighter, width: .3),
+            ),
+            child: Chart(db: db)),
     );
   }
 }

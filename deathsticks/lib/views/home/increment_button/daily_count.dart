@@ -22,7 +22,6 @@ class _DailyCountState extends State<DailyCount> {
 
     return Container(
       margin: new EdgeInsets.only(left: 35.0),
-      // child: Text('Count for the day: 24'),
       child: RichText(
         text: TextSpan(
           style: (Theme.of(context).textTheme.bodyText2),
@@ -31,7 +30,6 @@ class _DailyCountState extends State<DailyCount> {
               text: "Count for the day: ",
             ),
             TextSpan(
-              // want this to be length of daily
               text: " $dailyCount",
               style: (Theme.of(context).textTheme.subtitle1.apply(color: mainRed)),
             ),

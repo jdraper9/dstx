@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:deathsticks/models/event.dart';
 import 'package:deathsticks/services/db.dart';
@@ -38,6 +40,15 @@ class _ChartState extends State<Chart> {
         dailyCount += 1;
       }
     });
+
+    final reloadStream = Provider.of<String>(context) ?? null;
+    print('here');
+    print(reloadStream);
+    if (reloadStream == 'true') {
+      print('yes');
+    } else if (reloadStream == 'false') {
+      print('no');
+    }
 
     return FutureBuilder<List<DataPoint<dynamic>>>(
         future: _dataPoints,
