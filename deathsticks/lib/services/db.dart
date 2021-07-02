@@ -4,6 +4,7 @@ import 'package:bezier_chart/bezier_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:deathsticks/models/day.dart';
 import 'package:deathsticks/models/event.dart';
+import 'package:deathsticks/models/person.dart';
 
 class DatabaseService {
   final String uid;
@@ -15,9 +16,6 @@ class DatabaseService {
       month: DateTime.now().add(Duration(days: 1)).month,
       day: DateTime.now().add(Duration(days: 1)).day,
       year: DateTime.now().add(Duration(days: 1)).year);
-
-  final StreamController<String> _reloadController = StreamController<String>();
-  Stream<String> get reloadStream => _reloadController.stream;
 
   Day get getToday {
     return today;
@@ -102,27 +100,28 @@ class DatabaseService {
   }
 
   // increment count
-  Future increment() async {
-    print('plus one');
+  Future increment(Person person) async {
     // tmrw
-    // Day updatedToday = Day(
-    //     month: DateTime.now().add(Duration(days: 1)).month,
-    //     day: DateTime.now().add(Duration(days: 1)).day,
-    //     year: DateTime.now().add(Duration(days: 1)).year
-    //   );
+    Day updatedToday = Day(
+        month: DateTime.now().add(Duration(days: 1)).month,
+        day: DateTime.now().add(Duration(days: 1)).day,
+        year: DateTime.now().add(Duration(days: 1)).year
+      );
 
     // today
-    Day updatedToday = Day(
-        month: DateTime.now().month,
-        day: DateTime.now().day,
-        year: DateTime.now().year
-      );
+    // Day updatedToday = Day(
+    //     month: DateTime.now().month,
+    //     day: DateTime.now().day,
+    //     year: DateTime.now().year
+    //   );
 
     if (today.month < updatedToday.month || today.day < updatedToday.day || today.year < updatedToday.year) {
       print('its tmrw');
       // reload history / update graph range, 
         // send trigger to graph component to reload start and end dates, and datapoints
-      _reloadController.add("true");
+      //here
+      person.reloadTriggerController.add(true);
+
       // retarget daily count source for button and today on graph (eventsForToday)
     }
     var nowTimestamp = Timestamp.now().seconds.toString();

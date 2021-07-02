@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:deathsticks/models/event.dart';
+import 'package:deathsticks/models/person.dart';
 import 'package:deathsticks/services/db.dart';
 import 'package:deathsticks/shared/components/loading_2.dart';
 import 'package:deathsticks/shared/constants/colors.dart';
@@ -18,19 +19,31 @@ class Chart extends StatefulWidget {
 
 class _ChartState extends State<Chart> {
   Future<List<DataPoint<dynamic>>> _dataPoints;
+  DateTime now = DateTime.now();
+  DateTime fromDate = DateTime.now();
+  DateTime toDate = DateTime.now();
+
 
   @override
   void initState() {
     super.initState();
     _dataPoints = widget.db.getDataPoints();
+    fromDate = now.subtract(Duration(days: 28));
+    toDate = now;
   }
 
   @override
   Widget build(BuildContext context) {
-    // dates
-    final now = DateTime.now();
-    final fromDate = now.subtract(Duration(days: 28));
-    final toDate = now;
+    final person = Provider.of<Person>(context);
+
+    person.reloadTrigger.listen((event) {
+      if (event == true) {
+        DateTime newNow = DateTime.now();
+        setState(() => {fromDate = newNow.subtract(Duration(days: 27))});
+        setState(() => {toDate = newNow.add(Duration(days: 1))});
+      }
+      
+    });
 
     // calc today's dailyCount from stream
     int dailyCount = 0;
@@ -41,14 +54,16 @@ class _ChartState extends State<Chart> {
       }
     });
 
-    final reloadStream = Provider.of<String>(context) ?? null;
-    print('here');
-    print(reloadStream);
-    if (reloadStream == 'true') {
-      print('yes');
-    } else if (reloadStream == 'false') {
-      print('no');
-    }
+    
+
+    // final reloadStream = Provider.of<String>(context) ?? null;
+    // print('here');
+    // print(reloadStream);
+    // if (reloadStream == 'true') {
+    //   print('yes');
+    // } else if (reloadStream == 'false') {
+    //   print('no');
+    // }
 
     return FutureBuilder<List<DataPoint<dynamic>>>(
         future: _dataPoints,

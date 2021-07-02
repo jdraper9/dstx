@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:deathsticks/models/person.dart';
 import 'package:deathsticks/services/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +9,10 @@ class AuthService {
 
   Person _person(User user) {
     //modify user attributes from firebase here
-    return user != null ? Person(uid: user.uid) : null;
+    StreamController<bool> reloadController = StreamController<bool>();
+    reloadController.add(false);
+    return user != null ? Person(uid: user.uid, reloadTrigger: reloadController.stream.asBroadcastStream(), reloadTriggerController: reloadController)
+     : null;
   }
 
   // auth change user stream

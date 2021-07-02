@@ -19,10 +19,10 @@ class ChartContainer extends StatelessWidget {
         value: db.eventsForToday,
         
       ),
-        StreamProvider<String>.value(
-          initialData: 'true',
-          value: db.reloadStream,
-        )
+        // StreamProvider<String>.value(
+        //   initialData: 'true',
+        //   value: db.reloadStream,
+        // )
       ],
       child: Container(
             height: 300.0,
