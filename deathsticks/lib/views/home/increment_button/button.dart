@@ -19,7 +19,6 @@ class _ButtonState extends State<Button> {
       margin: new EdgeInsets.only(left: 25.0),
       child: FloatingActionButton(
         onPressed: () {
-          // person.reloadTriggerController.add(true);
           db.increment(person);
           // print(res);
         },

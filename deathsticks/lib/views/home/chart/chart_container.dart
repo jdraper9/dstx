@@ -6,18 +6,37 @@ import 'package:deathsticks/views/home/chart/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ChartContainer extends StatelessWidget {
+class ChartContainer extends StatefulWidget {
+  final DatabaseService db;
+  ChartContainer({this.db});
+
   @override
+  _ChartContainerState createState() => _ChartContainerState();
+}
+
+class _ChartContainerState extends State<ChartContainer> {
+  Stream<List<Event>> dailyEventStream;
+
+  @override
+  void initState() {
+    super.initState();
+    dailyEventStream = widget.db.eventsForToday;
+  }
+
   Widget build(BuildContext context) {
     final person = Provider.of<Person>(context);
-    final DatabaseService db = DatabaseService(uid: person.uid);
+
+    person.reloadTrigger.listen((event) {
+      setState(() {
+        dailyEventStream = widget.db.eventsForToday;
+      });
+    });
 
     return MultiProvider(
       providers: [
         StreamProvider<List<Event>>.value(
         initialData: [],
-        value: db.eventsForToday,
-        
+        value: dailyEventStream
       ),
         // StreamProvider<String>.value(
         //   initialData: 'true',
@@ -31,7 +50,7 @@ class ChartContainer extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: mainRedLighter, width: .3),
             ),
-            child: Chart(db: db)),
+            child: Chart(db: widget.db)),
     );
   }
 }

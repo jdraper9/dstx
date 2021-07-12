@@ -8,7 +8,7 @@ import 'package:deathsticks/models/person.dart';
 
 class DatabaseService {
   final String uid;
-  final Day today = Day(
+  Day today = Day(
       month: DateTime.now().month,
       day: DateTime.now().day,
       year: DateTime.now().year);
@@ -94,7 +94,6 @@ class DatabaseService {
         } else {
           print('hm');
         }
-        print(x + 1);
         return x;
       });
   }
@@ -102,21 +101,21 @@ class DatabaseService {
   // increment count
   Future increment(Person person) async {
     // tmrw
-    Day updatedToday = Day(
-        month: DateTime.now().add(Duration(days: 1)).month,
-        day: DateTime.now().add(Duration(days: 1)).day,
-        year: DateTime.now().add(Duration(days: 1)).year
-      );
-
-    // today
     // Day updatedToday = Day(
-    //     month: DateTime.now().month,
-    //     day: DateTime.now().day,
-    //     year: DateTime.now().year
+    //     month: DateTime.now().add(Duration(days: 1)).month,
+    //     day: DateTime.now().add(Duration(days: 1)).day,
+    //     year: DateTime.now().add(Duration(days: 1)).year
     //   );
 
+    // today
+    Day updatedToday = Day(
+        month: DateTime.now().month,
+        day: DateTime.now().day,
+        year: DateTime.now().year
+      );
+
     if (today.month < updatedToday.month || today.day < updatedToday.day || today.year < updatedToday.year) {
-      print('its tmrw');
+      // print('its tmrw');
       // reload history / update graph range, 
         // send trigger to graph component to reload start and end dates, and datapoints
       //here
@@ -134,7 +133,9 @@ class DatabaseService {
     int n = await getTodayNadir();
     int x = await getDailyCount(updatedToday) + 1;
     if (n == 0 || n == null) {
-      // check yesterday
+      // check most recent day. if no days, it is first day
+      // get all days, pick most recent
+      // instead of yesterday, use most recent day to get that Nadir
       Day yesterday = Day(
         month: DateTime.now().subtract(Duration(days: 1)).month,
         day: DateTime.now().subtract(Duration(days: 1)).day,
@@ -206,6 +207,12 @@ class DatabaseService {
 
   Stream<List<Event>> get eventsForToday {
     // var 
+    today = Day(
+      month: DateTime.now().month,
+      day: DateTime.now().day,
+      year: DateTime.now().year);
+    // print(today.toDayRef());
+    
 
     return dstxCollection
         .doc(uid)

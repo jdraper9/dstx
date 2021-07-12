@@ -30,17 +30,26 @@ class _ChartState extends State<Chart> {
     _dataPoints = widget.db.getDataPoints();
     fromDate = now.subtract(Duration(days: 28));
     toDate = now;
+    now = now;
   }
 
   @override
   Widget build(BuildContext context) {
     final person = Provider.of<Person>(context);
 
+    // BAD -- don't do it individually, just trigger a reload of the entire program?
     person.reloadTrigger.listen((event) {
       if (event == true) {
+        // change back to now after testing next day
+        // DateTime newNow = DateTime.now().add(Duration(days: 1));
         DateTime newNow = DateTime.now();
-        setState(() => {fromDate = newNow.subtract(Duration(days: 27))});
-        setState(() => {toDate = newNow.add(Duration(days: 1))});
+        setState(() {
+                  fromDate = newNow.subtract(Duration(days: 28));
+                  toDate = newNow;
+                  now = newNow;
+                });
+        // setState(() => {fromDate = newNow.subtract(Duration(days: 27))});
+        // setState(() => {toDate = newNow.add(Duration(days: 1))});
       }
       
     });

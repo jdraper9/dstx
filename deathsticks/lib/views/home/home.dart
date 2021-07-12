@@ -1,15 +1,21 @@
+import 'package:deathsticks/models/person.dart';
+import 'package:deathsticks/services/db.dart';
 import 'package:deathsticks/shared/constants/colors.dart';
 import 'package:deathsticks/services/auth.dart';
 import 'package:deathsticks/views/home/chart/chart_container.dart';
 import 'package:deathsticks/views/home/increment_button/button_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   final AuthService _auth = AuthService();
+  
 
   @override
   Widget build(BuildContext context) {
+    final person = Provider.of<Person>(context);
+    final DatabaseService db = DatabaseService(uid: person.uid);
     return Scaffold(
       backgroundColor: mainBlue,
       appBar: AppBar(
@@ -45,7 +51,7 @@ class Home extends StatelessWidget {
             SizedBox(height: 10.0),
             Text('Daily Tracker', style: (Theme.of(context).textTheme.subtitle2.apply(color: darkGray))),
             SizedBox(height: 60.0),
-            ChartContainer(),
+            ChartContainer(db: db),
             SizedBox(height: 50.0),
             ButtonContainer(),
           ],
