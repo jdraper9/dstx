@@ -162,9 +162,7 @@ class DatabaseService {
       month: DateTime.now().month,
       day: DateTime.now().day,
       year: DateTime.now().year);
-    // print(today.toDayRef());
     
-
     return dstxCollection
         .doc(uid)
         .collection('days')
@@ -172,6 +170,9 @@ class DatabaseService {
         .snapshots()
         .map(_listOfEventsFromSnapshot);
   }
+
+  //TODO
+  // Stream<int> get dailyNadir
 
   // get History (Person's collection('days')) 
   // List of Days, which have Lists of Events. Map Events to
@@ -200,10 +201,15 @@ class DatabaseService {
     snapshot.docs.forEach((QueryDocumentSnapshot doc) {
       //create day, and empty list
       var dateArray = doc.id.split("-");
+      var dailyNadir = doc.data()['dailyNadir'];
       Day pastDay = Day(
           month: int.parse(dateArray[0]),
           day: int.parse(dateArray[1]),
-          year: int.parse(dateArray[2]));
+          year: int.parse(dateArray[2]),
+          dailyNadir: dailyNadir,
+      );
+
+      
       List<Event> pastDayEvents = [];
       // for each field, create Event
       doc.data()['list'].forEach((key, value) {
@@ -224,9 +230,11 @@ class DatabaseService {
       history.forEach((day) {
         DateTime dayDate = DateTime(day.year, day.month, day.day);
         int dayCount = day.events.length;
+        int dailyNadir = day.dailyNadir;
+        double y_d = (( -dayCount / dailyNadir ) + 1) * 100;
         if (DateTime.now().difference(dayDate).inDays != 0) {
           DataPoint<DateTime> point =
-              DataPoint(value: dayCount.toDouble(), xAxis: dayDate);
+              DataPoint(value: y_d, xAxis: dayDate);
           points.add(point);
         }
       });

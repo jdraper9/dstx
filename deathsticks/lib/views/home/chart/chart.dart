@@ -40,15 +40,15 @@ class _ChartState extends State<Chart> {
       if (event == true) {
         DateTime newNow = DateTime.now();
         setState(() {
-                  fromDate = newNow.subtract(Duration(days: 28));
-                  toDate = newNow;
-                  now = newNow;
-                });
+          fromDate = newNow.subtract(Duration(days: 28));
+          toDate = newNow;
+          now = newNow;
+        });
       }
       
     });
 
-    // calc today's dailyCount from stream
+    // calc today's dailyScore from stream
     int dailyCount = 0;
     final dailyEvents = Provider.of<List<Event>>(context) ?? [];
     dailyEvents.forEach((Event e) {
