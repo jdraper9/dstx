@@ -72,7 +72,7 @@ class AuthService {
       if (e.code == 'weak-password') {
         return 'Weak password (<6 characters)';
       } else if (e.code == 'email-already-in-use') {
-        return 'Account already exists for that email.';
+        return 'Account already exists for that username.';
       }
     } catch (e) {
       print(e);

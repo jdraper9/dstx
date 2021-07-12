@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:deathsticks/models/event.dart';
 import 'package:deathsticks/models/person.dart';
@@ -37,19 +36,14 @@ class _ChartState extends State<Chart> {
   Widget build(BuildContext context) {
     final person = Provider.of<Person>(context);
 
-    // BAD -- don't do it individually, just trigger a reload of the entire program?
     person.reloadTrigger.listen((event) {
       if (event == true) {
-        // change back to now after testing next day
-        // DateTime newNow = DateTime.now().add(Duration(days: 1));
         DateTime newNow = DateTime.now();
         setState(() {
                   fromDate = newNow.subtract(Duration(days: 28));
                   toDate = newNow;
                   now = newNow;
                 });
-        // setState(() => {fromDate = newNow.subtract(Duration(days: 27))});
-        // setState(() => {toDate = newNow.add(Duration(days: 1))});
       }
       
     });
@@ -62,17 +56,6 @@ class _ChartState extends State<Chart> {
         dailyCount += 1;
       }
     });
-
-    
-
-    // final reloadStream = Provider.of<String>(context) ?? null;
-    // print('here');
-    // print(reloadStream);
-    // if (reloadStream == 'true') {
-    //   print('yes');
-    // } else if (reloadStream == 'false') {
-    //   print('no');
-    // }
 
     return FutureBuilder<List<DataPoint<dynamic>>>(
         future: _dataPoints,
@@ -92,9 +75,9 @@ class _ChartState extends State<Chart> {
                         label: "Score",
                         dataPointFillColor: mainBlueLighter,
                         lineColor: mainRed,
-                        // onMissingValue: (dateTime) {
-                        //   return 0;
-                        // },
+                        onMissingValue: (dateTime) {
+                          return 100;
+                        },
                         data: [
                           // DataPoint<DateTime>(value: 10.0, xAxis: now)
                           DataPoint<DateTime>(

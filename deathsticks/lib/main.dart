@@ -13,13 +13,9 @@ void main() {
   runApp(DeathsticksApp());
 }
 
-// notes
-// on 15
-
 class DeathsticksApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
