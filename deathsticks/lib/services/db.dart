@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,7 +34,7 @@ class DatabaseService {
         .doc(uid)
         .collection('days')
         .doc(today.toDayRef())
-        .set({'list': {'$nowTimestamp': false}, 'dailyNadir': 0})
+        .set({'list': {'$nowTimestamp': false}, 'dailyNadir': 1})
         .catchError((err) => print("Fail to register: $err"));
   }
 
@@ -100,14 +99,6 @@ class DatabaseService {
 
   // increment count
   Future increment(Person person) async {
-    // tmrw
-    // Day updatedToday = Day(
-    //     month: DateTime.now().add(Duration(days: 1)).month,
-    //     day: DateTime.now().add(Duration(days: 1)).day,
-    //     year: DateTime.now().add(Duration(days: 1)).year
-    //   );
-
-    // today
     Day updatedToday = Day(
         month: DateTime.now().month,
         day: DateTime.now().day,
@@ -115,36 +106,32 @@ class DatabaseService {
       );
 
     if (today.month < updatedToday.month || today.day < updatedToday.day || today.year < updatedToday.year) {
-      // print('its tmrw');
-      // reload history / update graph range, 
         // send trigger to graph component to reload start and end dates, and datapoints
-      //here
       person.reloadTriggerController.add(true);
-
-      // retarget daily count source for button and today on graph (eventsForToday)
     }
     var nowTimestamp = Timestamp.now().seconds.toString();
-    // print(updatedToday.day);
-    // print(DateTime.now().add(Duration(days: 1)).day);
-    // print(nowTimestamp);
 
-    // 
-    // if n = 0, set to n of yesterday, or if none yesterday, to x
     int n = await getTodayNadir();
     int x = await getDailyCount(updatedToday) + 1;
     if (n == 0 || n == null) {
-      // check most recent day. if no days, it is first day
-      // get all days, pick most recent
-      // instead of yesterday, use most recent day to get that Nadir
-      Day yesterday = Day(
-        month: DateTime.now().subtract(Duration(days: 1)).month,
-        day: DateTime.now().subtract(Duration(days: 1)).day,
-        year: DateTime.now().subtract(Duration(days: 1)).year,
-      );
-      int yesterdayN = await getNadir(yesterday);
-      if (yesterdayN != null && yesterdayN != 0) {
-        await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
-          .set({'dailyNadir': yesterdayN}, SetOptions(merge: true));
+      QuerySnapshot daysSnapshot =
+          await dstxCollection.doc(uid).collection('days').get();
+      List<Day> days = _historyFromCollection(daysSnapshot);
+      int latestPastTimestamp = 0;
+      Day latestPastDay;
+      days.forEach((day) {
+        DateTime dayDate = DateTime.utc(day.year, day.month, day.day);
+        if (dayDate.millisecondsSinceEpoch > latestPastTimestamp && day.toDayRef() != updatedToday.toDayRef()) {
+          latestPastTimestamp = dayDate.millisecondsSinceEpoch;
+          latestPastDay = day; 
+        }
+      });
+      if (latestPastDay != null) {
+        int latestPastDayN = await getNadir(latestPastDay);
+        if (latestPastDayN != null && latestPastDayN != 0) {
+          await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
+          .set({'dailyNadir': latestPastDayN}, SetOptions(merge: true));
+        }
       }
     } else if (x > n) {
       
@@ -156,42 +143,6 @@ class DatabaseService {
         .collection('days')
         .doc(updatedToday.toDayRef())
         .set({'list': {'$nowTimestamp': true}}, SetOptions(merge: true));
-  }
-
-  // increment count
-  Future incrementTmrw() async {
-    Day updatedToday = Day(
-        month: DateTime.now().add(Duration(days: 1)).month,
-        day: DateTime.now().add(Duration(days: 1)).day,
-        year: DateTime.now().add(Duration(days: 1)).year);
-    var tmrwTimestamp = (Timestamp.now().seconds + 86400).toString();
-
-    // 
-    // if n = 0, set to n of yesterday, or if none yesterday, to x
-    int n = await getNadir(updatedToday);
-    int x = await getDailyCount(updatedToday) + 1;
-    if (n == 0 || n == null) {
-      // check today
-      Day today = Day(
-        month: DateTime.now().month,
-        day: DateTime.now().day,
-        year: DateTime.now().year,
-      );
-      int yesterdayN = await getNadir(today);
-      if (yesterdayN != null && yesterdayN != 0) {
-        await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
-          .set({'dailyNadir': yesterdayN}, SetOptions(merge: true));
-      }
-    } else if (x > n) {
-      
-      await dstxCollection.doc(uid).collection('days').doc(updatedToday.toDayRef())
-      .set({'dailyNadir': x}, SetOptions(merge: true));
-    }
-    return await dstxCollection
-        .doc(uid)
-        .collection('days')
-        .doc(updatedToday.toDayRef())
-        .set({'list': {'$tmrwTimestamp': true}}, SetOptions(merge: true));
   }
 
   // get Day's list of Events as stream
@@ -222,10 +173,9 @@ class DatabaseService {
         .map(_listOfEventsFromSnapshot);
   }
 
-  // get History (Person's collection('days')) \
+  // get History (Person's collection('days')) 
   // List of Days, which have Lists of Events. Map Events to
   //   daily count, find Nadir, use daily count and Nadir to map daily Events list to Score
-
   // just need list of (date, score)
   // get ('days') collection, each id within becomes Day, each Day has Events
   // from each day, get score
@@ -264,9 +214,6 @@ class DatabaseService {
         }
       });
       pastDay.events = pastDayEvents;
-      // print('today');
-      // print(today.toDayRef());
-      // print(pastDay.toDayRef());
       history.add(pastDay);
     });
     return history;
