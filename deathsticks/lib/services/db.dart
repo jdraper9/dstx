@@ -170,9 +170,23 @@ class DatabaseService {
         .snapshots()
         .map(_listOfEventsFromSnapshot);
   }
+  
+  int _dailyNadirFromSnapshot(DocumentSnapshot snapshot) {
+    int dailyN = 1;
+    if (snapshot.exists) {
+      dailyN = snapshot.data()['dailyNadir'];
+    }
+    return dailyN;
+  }
 
-  //TODO
-  // Stream<int> get dailyNadir
+  Stream<int> get dailyNadir {
+    today = Day(
+      month: DateTime.now().month,
+      day: DateTime.now().day,
+      year: DateTime.now().year);
+
+    return dstxCollection.doc(uid).collection('days').doc(today.toDayRef()).snapshots().map(_dailyNadirFromSnapshot);
+  }
 
   // get History (Person's collection('days')) 
   // List of Days, which have Lists of Events. Map Events to

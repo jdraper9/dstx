@@ -48,6 +48,8 @@ class _ChartState extends State<Chart> {
       
     });
 
+    final dailyNadir = Provider.of<int>(context) ?? 1;
+
     // calc today's dailyScore from stream
     int dailyCount = 0;
     final dailyEvents = Provider.of<List<Event>>(context) ?? [];
@@ -72,7 +74,7 @@ class _ChartState extends State<Chart> {
                     selectedDate: toDate,
                     series: [
                       BezierLine(
-                        label: "Score",
+                        label: dailyNadir.toString(),
                         dataPointFillColor: mainBlueLighter,
                         lineColor: mainRed,
                         onMissingValue: (dateTime) {

@@ -35,13 +35,13 @@ class _ChartContainerState extends State<ChartContainer> {
     return MultiProvider(
       providers: [
         StreamProvider<List<Event>>.value(
-        initialData: [],
-        value: dailyEventStream
-      ),
-        // StreamProvider<String>.value(
-        //   initialData: 'true',
-        //   value: db.reloadStream,
-        // )
+          initialData: [],
+          value: dailyEventStream
+        ),
+        StreamProvider<int>.value(
+          initialData: 1,
+          value: widget.db.dailyNadir,
+        ),
       ],
       child: Container(
             height: 300.0,
