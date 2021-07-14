@@ -59,6 +59,16 @@ class _ChartState extends State<Chart> {
       }
     });
 
+    if (dailyNadir - dailyCount == 1) {
+      // sometimes daily count lags and is one behind daily nadir
+      dailyCount += 1;
+    }
+    double yD = ((( -dailyCount / dailyNadir ) + 1) * 100).roundToDouble();
+    if (yD == 0.0) {
+      yD = 0.01;
+    }
+    // print(yD);
+
     return FutureBuilder<List<DataPoint<dynamic>>>(
         future: _dataPoints,
         builder: (context, snapshot) {
@@ -74,16 +84,15 @@ class _ChartState extends State<Chart> {
                     selectedDate: toDate,
                     series: [
                       BezierLine(
-                        label: dailyNadir.toString(),
+                        label: "Score",
                         dataPointFillColor: mainBlueLighter,
                         lineColor: mainRed,
                         onMissingValue: (dateTime) {
                           return 100;
                         },
                         data: [
-                          // DataPoint<DateTime>(value: 10.0, xAxis: now)
                           DataPoint<DateTime>(
-                              value: dailyCount.toDouble(), xAxis: now),
+                              value: yD, xAxis: now),
                           ...snapshot.data,
                         ],
                       ),
