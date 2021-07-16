@@ -10,7 +10,7 @@ A visualized algorithm to incentivize healthy activity with a point based reward
 
 ### Rules:
 - A player in this game presses a button every time they smoke a cigarette.
-- However many cigarettes are smoked that first day, this becomes the daily 'nadir' (N) of the player: the most amount cigarettes they've smoked in a day, ever       (while playing the game).
+- However many cigarettes are smoked that first day, this becomes the daily 'nadir' (N) of the player: the most amount of cigarettes they've smoked in a day, ever       (while playing the game).
 - The next day, or the next time the player logs in and presses the button, the previous daily N is inherited by this new day.
 - If a player's daily smoke count becomes greater than N, this new 'nadir' replaces that daily N value.
 - Points are given as follows: Each day a player will receive a score, from 0 (worst) to 100 (best). If a player smokes 0 times in a day, their daily score is 100. - When a player has smoked enough cigarettes to reach their daily N value (the most cigarettes they have smoked in a day while playing), their score is 0. Any      additional amout above N is also 0.
