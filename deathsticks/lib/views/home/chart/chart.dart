@@ -88,7 +88,7 @@ class _ChartState extends State<Chart> {
                         dataPointFillColor: mainBlueLighter,
                         lineColor: mainRed,
                         onMissingValue: (dateTime) {
-                          return 100;
+                          return 1;
                         },
                         data: [
                           DataPoint<DateTime>(

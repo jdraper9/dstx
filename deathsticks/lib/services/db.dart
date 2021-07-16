@@ -247,8 +247,10 @@ class DatabaseService {
         int dailyNadir = day.dailyNadir;
         double y_d = (( -dayCount / dailyNadir ) + 1) * 100;
         if (DateTime.now().difference(dayDate).inDays != 0) {
-          DataPoint<DateTime> point =
-              DataPoint(value: y_d, xAxis: dayDate);
+          DataPoint<DateTime> point = DataPoint(value: y_d.roundToDouble(), xAxis: dayDate);
+          if (point.value == 0.0) {
+            point = DataPoint(value: 0.01, xAxis: dayDate);
+          }
           points.add(point);
         }
       });
