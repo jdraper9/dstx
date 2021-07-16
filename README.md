@@ -2,7 +2,7 @@
 Deathsticks 1.0
 An iOS/android/web app to help people quit smoking.
 
-# Goal
+## Goal
 Help people quit smoking. Eventually use app components to build larger goal / activity tracking app.
 
 # The Game:
