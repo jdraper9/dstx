@@ -59,15 +59,18 @@ class _ChartState extends State<Chart> {
       }
     });
 
-    if (dailyNadir - dailyCount == 1) {
+    print(dailyNadir);
+
+    if (dailyNadir - dailyCount == 1 && !(dailyCount == 0 && dailyNadir == 1)) {
       // sometimes daily count lags and is one behind daily nadir
       dailyCount += 1;
     }
+
     double yD = ((( -dailyCount / dailyNadir ) + 1) * 100).roundToDouble();
     if (yD == 0.0) {
       yD = 0.01;
     }
-    // print(yD);
+
 
     return FutureBuilder<List<DataPoint<dynamic>>>(
         future: _dataPoints,
