@@ -1,6 +1,9 @@
 # dstx
 Deathsticks 1.0
-An iOS/android/web app to help people quit smoking.
+An iOS/android/web app to help game people quit smoking.
+
+## Tech
+Flutter, Googel Cloud Firestore realtime database (NoSQL)
 
 ## Goal
 Help people quit smoking with the power of timestamps! My attempt at using technology to make things better. The idea is to gameify the process of quitting cigarettes, so that progress toward this goal feels rewarding for those who are stuck. Eventually use app components to build larger goal / activity tracking app.
