@@ -9,7 +9,7 @@ Flutter, Google Cloud Firestore realtime database (NoSQL)
 dstx/deathsticks/lib/services/db.dart (the Database service)
 
 ## Goal
-Help people quit smoking with the power of timestamps! My attempt at using technology to make things better. The idea is to gameify the process of quitting cigarettes, so that progress toward this goal feels rewarding for those who are stuck. Eventually use app components to build larger goal / activity tracking app.
+Help people quit smoking with the power of timestamps! My attempt at using technology to make things better. The idea is to gameify the process of quitting smoking, so that progress toward this goal feels rewarding for those who are stuck. Eventually use app components to build larger goal / activity tracking app.
 
 ### The Game:
 A visualized algorithm to incentivize healthy activity with a point based reward system.
